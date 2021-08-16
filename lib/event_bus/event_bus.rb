@@ -7,6 +7,10 @@ class EventBus
   
   @@events = []
 
+  def self.events
+    @@events
+  end
+
   def self.get_event name
     for event in @@events do
       return event if event.name == name ||
