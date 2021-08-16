@@ -11,7 +11,15 @@ EventHandler - DONE
   wrapper for a proc
   token for guarunteed uniqueness
 
+
+Factory
+  generates players pieces
+  generates gameboard
+    generates nodes
+
+
 GameState
+
 
 GameBoard
   pieces
@@ -25,10 +33,12 @@ GameBoard
     keyed rows [a..e]
     keyed cols [1..8]
     nodes
+      color
       row
       col
       occupied?
       piece
+
 
 Game
   include Display
@@ -39,8 +49,6 @@ Game
     show board and list pieces with valid moves
     get player piece selection
     list pieces valid moves
-
-  
   main_loop
     each player turn
       Display::show movable pieces
@@ -53,6 +61,7 @@ Game
     update_display
     is_game_over?
 
+
 Player
   include MoveValidator
   color
@@ -63,6 +72,7 @@ Player
     key for each piece pawn1, pawn2, king, queen, etc...
     key for list of alive pieces [:active]
     key for list of dead pieace  [:inactive]
+
 
 GamePiece
   include Pathfinder
@@ -83,6 +93,9 @@ Rook < GamePiece
 King < GamePiece
 
 Queen < GamePiece
+
+
+
 
 modules:
 
