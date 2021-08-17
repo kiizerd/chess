@@ -4,20 +4,34 @@ describe Factory do
   describe "#make_all_pieces" do
     let(:pieces) { Factory.make_all_pieces }
 
-    xit "fills the counts hash with non-zero values" do
-      expect(Factory.counts[:white]).to all( be_between(1, 8) )
-      expect(Factory.counts[:black]).to all( be_between(1, 8) )
-    end
-
-    xit "returns a hash" do
+    it "returns a hash" do
       expect(pieces).to be_a Hash
     end
 
-    xit "has keys for white, black, active and inactive" do
+    it "has hash value for white, black keys" do
       expect(pieces).to include(
-        :black,
-        :white
+        black: Hash,
+        white: Hash
       )
+    end
+
+    it "each array has correct size" do
+      sizes = pieces.map do |color, colored_pieces|
+        counts = colored_pieces.map do |type, typed_pieces|
+          size = typed_pieces.is_a?(Array) ? typed_pieces.size : 1
+          [type, size]
+        end.to_h
+        [color, counts]
+      end.to_h
+
+      expect(sizes).to eq({
+        white: {
+          pawn: 8, bishop: 2, knight: 2, rook: 2, king: 1, queen: 1
+        },
+        black: {
+          pawn: 8, bishop: 2, knight: 2, rook: 2, king: 1, queen: 1
+        }
+      })
     end
   end
 
@@ -38,19 +52,46 @@ describe Factory do
   end
 
   describe "#make_typed_piece" do
-    let(:pawn) { Factory.make_typed_piece(:black, :pawn) }
-    let(:king) { Factory.make_typed_piece(:white, :king) }
+    context "creating black pawn" do
+      let(:pawn)   { Factory.make_typed_piece(:black, :pawn, 0) }
 
-    it "returns given type as Class" do
-      expect(pawn).to be_a Pawn
+      it "returns given type as Class" do
+        expect(pawn).to be_a Pawn
+      end
+      
+      it "returns piece with correct color" do
+        expect(pawn.color).to be :black
+      end
     end
+    
+    context "creating white king" do
+      let(:king)   { Factory.make_typed_piece(:white, :king) }
 
-    it "returns piece with correct color" do
-      expect(pawn.color).to be :black
+      it "returns a king" do
+        expect(king).to be_a King  
+      end
+      
+      it "returns piece with correct position" do
+        expect(king.pos).to eq [0, 4]
+      end
     end
+    
+    context "creating both black bishops" do
+      let(:bishop) { Factory.make_typed_piece(:black, :bishop, 0) }
+      let(:second_bishop) { Factory.make_typed_piece(:black, :bishop, 1) }
 
-    it "returns piece with correct position" do
-      expect(king.pos).to eq [0, 4]
+      it "returns a bishop" do
+        expect(bishop).to be_a Bishop
+      end
+
+      it "returns a piece with correct position" do
+        # returns 1st bishop
+        expect(bishop.pos).to eq [7, 2]
+      end
+
+      it "returns correct piece on second call" do
+        expect(second_bishop.pos).to eq [7, 5]
+      end
     end
   end
 
