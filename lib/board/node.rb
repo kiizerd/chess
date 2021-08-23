@@ -1,4 +1,3 @@
-require 'pry'
 require_relative '../event_bus/event_bus'
 
 class Node
@@ -23,7 +22,6 @@ class Node
     callback = ->(payload) do
       color = payload[:color]
       piece = payload[:piece]
-      binding.pry
       if (color == get_player_color) && (piece.pos == pos)
         @occupied = true
         set_piece(piece)
@@ -37,7 +35,27 @@ class Node
   end
 
   def set_piece piece
-    @piece = piece
+    @occupied = true
+    @piece    = piece
+    @piece.update_position(pos)
+  end
+
+  def remove_piece
+    @piece    = nil
+    @occupied = false
+  end
+
+  def piece_captured attacker
+    @piece.remove_from_board
+    remove_piece
+
+    payload = {
+      attack_piece: attacker,
+      captured_piece: @piece,
+      node: self
+    }
+    EventBus.publish(:piece_captured, payload)
+    # listen for this event on player
   end
 
   def get_player_color
@@ -50,6 +68,10 @@ class Node
 
   def get_node_color
     (@rank + @file).even? ? :black : :white
+  end
+
+  def occupied?
+    @occupied
   end
 
 end
