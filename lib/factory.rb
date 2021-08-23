@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'pieces/pieces'
 require_relative 'event_bus/event_bus'
 
@@ -60,7 +59,7 @@ class Factory
 
   def self.make_rook color, num
     rank = color == :black ? 7 : 0
-    file = num   == 0      ? 7 : 0
+    file = num   == 0      ? 0 : 7
     Rook.new(color, [rank, file])
   end
 
