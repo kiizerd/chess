@@ -5,10 +5,8 @@ class Piece
   def initialize color, pos
     @color = color.to_sym
     @position = {
-      rank: pos[0],
-      file: pos[1],
-      current: [pos[0], pos[1]],
-      prev:    nil
+      current:  [pos[0], pos[1]],
+      previous: nil
     }
     
     @last_move = [@position[:prev], @position[:current]]
@@ -19,10 +17,34 @@ class Piece
     @position[:current]
   end
 
+  def prev
+    @position[:previous]
+  end
+
+  def set_position new_pos
+    @position[:current] = new_pos
+  end
+
+  def set_last_move arr
+    @last_move = arr
+  end
+
+  def update_position new_pos
+    @last_move = [pos(), new_pos]
+    @position[:previous] = pos()
+    set_position new_pos
+  end
+  
+  def remove_from_board
+    @position[:prev] = @position[:current]
+    @position[:current] = nil
+    @captured = true
+  end
+
   # a move will be defined as a pair of a positions, which in turn are a pair of coordinates
   # an origin and a destination
   def get_valid_moves
-    moves.select { |dir, mov| check_bounds(mov[0], mov[1]) }
+    possible_moves.select { |dir, mov| check_bounds(mov[0], mov[1]) }
   end
 
   # up is defined as the black home side of the board, rank 8, row 7
@@ -30,8 +52,8 @@ class Piece
   # left and right can be deduced
   # the parent class has moves matching the King piece
   # every other piece will define it's own moves
-  def moves
-    rank, file = @position.values_at(:rank, :file)
+  def possible_moves
+    rank, file = pos
     {
       up:    [rank + 1, file],
       down:  [rank - 1, file],
@@ -45,6 +67,6 @@ class Piece
   end
 
   def check_bounds rank, file
-    (rank <= 8 && 1 <= rank) && (file <= 8 && 1 <= file) ? true : false
+    (rank <= 7 && 0 <= rank) && (file <= 7 && 0 <= file) ? true : false
   end
 end
