@@ -21,18 +21,10 @@ class Piece
     @position[:previous]
   end
 
-  def set_position new_pos
-    @position[:current] = new_pos
-  end
-
-  def set_last_move arr
-    @last_move = arr
-  end
-
   def update_position new_pos
     @last_move = [pos(), new_pos]
     @position[:previous] = pos()
-    set_position new_pos
+    @position[:current] = new_pos
   end
   
   def remove_from_board
