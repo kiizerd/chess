@@ -23,13 +23,13 @@ class EventBus
     Event.new(name.to_sym)
   end
 
-  def self.subscribe event_name, handler=nil
+  def self.subscribe event_name, subscriber, handler=nil
     event = get_event(event_name)
     if !event
       event = create_event(event_name)
       @@events << event
     end
-    event.add_handler handler
+    event.add_handler handler, subscriber
   end
 
   def self.publish event_name, *payload
