@@ -11,20 +11,20 @@ class Node
     @occupied = false
     @piece    = nil
     
-    EventBus.subscribe(:piece_made, listen_for_piece)
+    EventBus.subscribe(:piece_made, self, listen_for_piece(pos()))
   end
 
   def pos
     [@rank, @file]
   end
 
-  def listen_for_piece
+  def listen_for_piece node_pos
     callback = ->(payload) do
       color = payload[:color]
       piece = payload[:piece]
-      if (color == get_player_color) && (piece.pos == pos)
+      if (color == get_player_color) && (piece.pos == node_pos)
         @occupied = true
-        set_piece(piece)
+        update_piece(piece)
       end
     end
     Handler.new(:node_piece_listener, callback)
@@ -34,10 +34,10 @@ class Node
     @piece ? @piece : false
   end
 
-  def set_piece piece
+  def update_piece piece
     @occupied = true
     @piece    = piece
-    @piece.update_position(pos)
+    @piece.update_position(pos()) if piece.pos != pos()
   end
 
   def remove_piece
@@ -45,17 +45,17 @@ class Node
     @occupied = false
   end
 
-  def piece_captured attacker
-    @piece.remove_from_board
-    remove_piece
-
+  def piece_captured_by attacker
     payload = {
       attack_piece: attacker,
       captured_piece: @piece,
       node: self
     }
-    EventBus.publish(:piece_captured, payload)
     # listen for this event on player
+    EventBus.publish(:piece_captured, payload)
+
+    @piece.remove_from_board
+    remove_piece
   end
 
   def get_player_color
