@@ -16,12 +16,13 @@ class Event
     return @handlers.find { |h| h.token == token }
   end
 
-  def add_handler handler
-    if has_handler? handler.token
-      return false
-    else
-      @handlers << handler
-    end
+  def add_handler handler, subscriber
+    @handlers << handler
+    # TODO - determine where handler restrictions need be
+    # if has_handler?(handler.token)
+    #   return false
+    # else
+    # end
   end
 
   def remove_handler handler_token
