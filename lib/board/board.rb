@@ -1,5 +1,4 @@
 require_relative 'node'
-require 'pry'
 
 class Board
 
@@ -17,7 +16,7 @@ class Board
     @files.each_with_index do |file, ind|
       @ranks.each do |rank|
         symbol = "#{file}#{rank}".to_sym
-        nodes[symbol] = Node.new([ind, rank - 1])
+        nodes[symbol] = Node.new([rank - 1, ind])
       end
     end
     nodes
@@ -105,8 +104,8 @@ class Board
     real_nodes = stub_nodes
 
     apply_move(piece, origin, dest)
-
-    check = king_in_check?(piece.color)
+    dest_node = node_at(dest)
+    check = king_in_check?(piece.color) &&
     @nodes = real_nodes
     return check
   end
@@ -136,7 +135,7 @@ class Board
   end
 
   def get_node_key row, col
-    "#{@files[row]}#{@ranks[col]}".to_sym
+    "#{@files[col]}#{@ranks[row]}".to_sym
   end
 
   def node_at arr
@@ -146,11 +145,11 @@ class Board
 
   def get_nodes_between node_a, node_b
     case
-    when node_a.pos[1] == node_b.pos[1]
+    when node_a.file == node_b.file
       get_nodes_between_rank(node_a, node_b)
-    when node_a.pos[0] == node_b.pos[0]
+    when node_a.rank == node_b.rank
       get_nodes_between_file(node_a, node_b)
-    when node_a.pos[0] - node_b.pos[0] == node_a.pos[1] - node_b.pos[1]
+    when (node_a.rank - node_b.rank).abs == (node_a.file - node_b.file).abs
       get_nodes_between_diag(node_a, node_b)
     else
       false
@@ -178,14 +177,15 @@ class Board
   end
 
   def get_nodes_between_diag node_a, node_b
-
+    horz = node_a.file < node_b.file ? :right : :left
+    vert = node_a.rank < node_b.rank ? :up    : :down
+    dist = (node_a.rank - node_b.rank).abs - 1
+    (1..dist).to_a.reduce([]) do |nodes, i|
+      nodes << node_at([
+        node_a.rank + (vert == :up ? i : -i),
+        node_a.file + (horz == :right ? i : -i)
+      ])
+    end
   end
+
 end
-
-require_relative "../../lib/factory"
-
-board = Board.new
-
-Factory.make_all_pieces
-
-binding.pry
