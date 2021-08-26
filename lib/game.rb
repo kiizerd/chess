@@ -1,12 +1,29 @@
 require_relative 'player'
+require_relative 'factory'
+require_relative 'pieces/pieces'
+require_relative 'board/board'
 
 class Game
   def initialize
+    @board = Board.new
     players
   end
 
   def main_loop
+    # get current player
 
+    # show players moveable pieces
+    # get players pieces selection
+    # get pieces potential moves
+    # reject invalid moves
+
+    # show selected pieces possible moves
+    # get players selected pieces desired move 
+    # or allow player to reselect
+
+    # apply move
+
+    # set next player as current player
   end
 
   def players() @players ||= [] end
