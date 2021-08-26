@@ -13,26 +13,21 @@ EventHandler - DONE
 
 
 Factory
-  generates players pieces
-  generates gameboard
-    generates nodes
+  generates players pieces - DONE
 
 
 GameState
 
 
 GameBoard
-  pieces
-    :white - all white pieces
-    :black - all black pieces
-    :active - living pieces
-    :inactive - dead pieces
-  board/graph
+  pieces - DONE
+  board/graph - Might be unneccesary
     indexed rows [0..7]
     indexed cols [0..7]
     keyed rows [a..e]
     keyed cols [1..8]
-    nodes
+  generates nodes - DONE
+    nodes - DONE
       color
       row
       col
