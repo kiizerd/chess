@@ -13,11 +13,16 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     method_source (1.0.0)
-    nokogiri (1.12.3-x86_64-darwin)
+    mini_portile2 (2.6.1)
+    nokogiri (1.12.3)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    paint (2.2.1)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -56,15 +61,28 @@ GEM
       yard (~> 0.9, >= 0.9.24)
     thor (1.1.0)
     tilt (2.0.10)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.23.1)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
     unicode-display_width (2.0.0)
+    wisper (2.0.1)
     yard (0.9.26)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  paint (~> 2.2, >= 2.2.1)
   pry (~> 0.14.1)
   solargraph (~> 0.43.0)
+  tty-prompt (~> 0.23.1)
 
 BUNDLED WITH
    2.1.4
