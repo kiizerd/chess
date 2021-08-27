@@ -5,6 +5,13 @@ require_relative 'event_bus/event_bus'
 # PieceFactory NodeFactory
 class Factory
 
+  def self.make_players
+    (1..2).to_a.reduce([]) do |players, num|
+      players << Player.new(num, [:black, :white][num-1])
+      players
+    end
+  end
+
   @@amounts = { pawn: 8, bishop: 2, knight: 2, rook: 2, queen: 1, king: 1 }
 
   # TODO - make this prettier
