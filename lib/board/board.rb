@@ -11,6 +11,7 @@ class Board
     @nodes = make_nodes
   end
 
+  # TODO - move this to Factory and listen for it here
   def make_nodes
     nodes = {}
     @files.each_with_index do |file, ind|
