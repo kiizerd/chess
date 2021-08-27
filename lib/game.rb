@@ -10,8 +10,8 @@ class Game
 
   def initialize
     @board = Board.new
+    @players = Factory.make_players
     Factory.make_all_pieces
-    @players = fill_players
     show_board(:white, @board)
   end
 
@@ -35,18 +35,6 @@ class Game
 
     # set next player as current player
   end
-
-  def colors
-    [:white, :black]
-  end
-
-  def fill_players
-    if players.empty?
-      2.times { |i| @players << create_player(i) }
-    end
-  end
-
-  def create_player(num) Player.new(num + 1, colors[num]) end
 
   def user_input(min, max)
     loop do
