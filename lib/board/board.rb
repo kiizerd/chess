@@ -34,18 +34,34 @@ class Board
     pieces.select { |p| p.color == player_color && p.class == King }[0]
   end
 
+  # applies move to stubbed board and checks if king would be in check from move
+  def check_move? piece, origin, dest
+    real_nodes = stub_nodes
+
+    apply_move(piece, origin, dest)
+    dest_node = node_at(dest)
+    check = king_in_check?(piece.color)
+    @nodes = real_nodes
+    return check
+  end
+
   # Applies move to piece without checking gamerules or move validity
   def apply_move piece, origin, dest
     node_at(origin).remove_piece
-    
+
     dest_node = node_at(dest)
     dest_node.piece_captured_by(piece) if dest_node.occupied?
     dest_node.update_piece piece
     @last_move = { piece: piece, origin: origin, dest: dest }
   end
 
-  def last_move
-    @last_move
+  def check_pawn_move pawn, origin, dest
+    is_capture_move = origin[1] != dest[1]
+    dest_occupied = node_at(dest).occupied?
+    return false if is_capture_move && !can_en_passant?(pawn) && !dest_occupied
+    return false if is_capture_move && !dest_occupied 
+    return false if !is_capture_move && dest_occupied
+    return true
   end
 
   def can_en_passant? attacker
@@ -98,16 +114,6 @@ class Board
       .reject { |p| p.color == safe_color }
       .select { |p| p.get_valid_moves.values.include? node.pos }
       .empty?
-  end
-
-  def check_move? piece, origin, dest
-    real_nodes = stub_nodes
-
-    apply_move(piece, origin, dest)
-    dest_node = node_at(dest)
-    check = king_in_check?(piece.color) &&
-    @nodes = real_nodes
-    return check
   end
 
   def king_in_check? player_color
