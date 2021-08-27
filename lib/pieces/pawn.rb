@@ -39,7 +39,7 @@ class Pawn < Piece
     case dir
     when :down
       moves << [rank - 1, file]
-      moves << [rank - 2, file]
+      moves << [rank - 2, file] unless has_moved?
     when :down_left  then moves << [rank - 1, file - 1]
     when :down_right then moves << [rank - 1, file + 1]
     end
