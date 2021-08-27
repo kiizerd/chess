@@ -2,11 +2,21 @@ require_relative 'player'
 require_relative 'factory'
 require_relative 'pieces/pieces'
 require_relative 'board/board'
+require_relative 'display'
 
 class Game
+
+  include Display
+
   def initialize
     @board = Board.new
-    players
+    Factory.make_all_pieces
+    @players = fill_players
+    show_board(:white, @board)
+  end
+
+  def start
+    
   end
 
   def main_loop
@@ -26,8 +36,9 @@ class Game
     # set next player as current player
   end
 
-  def players() @players ||= [] end
-  def colors() [:white, :black] end
+  def colors
+    [:white, :black]
+  end
 
   def fill_players
     if players.empty?
