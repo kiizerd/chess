@@ -2,7 +2,7 @@ require_relative 'node'
 
 class Board
 
-  attr_reader :nodes, :last_move
+  attr_reader :nodes, :last_move, :ranks, :files
 
   def initialize
     @ranks = (1..8).to_a
